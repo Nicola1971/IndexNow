@@ -36,7 +36,7 @@ if ($modx->event->name == 'OnDocFormSave' || $modx->event->name == 'OnDocFormDel
         // Valid document - send to IndexNow
 $indexnow_key = isset($indexnow_key) ? $indexnow_key : '';
 
-// Funzione per inviare una richiesta cURL a IndexNow
+// Function to send a cURL request to IndexNow
 function sendToIndexNow($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -44,51 +44,51 @@ function sendToIndexNow($url) {
     curl_setopt($ch, CURLOPT_HEADER, 0);
     $output = curl_exec($ch);
 
-    // Controllo se la richiesta cURL ha fallito
+    // Check if cURL request failed
     if (curl_errno($ch)) {
         $error_msg = curl_error($ch);
         curl_close($ch);
         return ['status' => 'error', 'message' => 'Errore cURL: ' . $error_msg];
     }
 
-    // Recupero le informazioni della richiesta
+    // Retrieve request information
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    // Se la risposta è 202 (Accepted), restituisci un messaggio di successo
+    // If the response is 202 (Accepted), return a success message
  if ($http_code == 200) {
-        return ['status' => 'success', 'message' => 'IndexNow ha ricevuto la richiesta per l\'URL'];
+        return ['status' => 'success', 'message' => 'IndexNow has received the request for 'URL'];
     } else 
     if ($http_code == 202) {
-        return ['status' => 'success', 'message' => 'IndexNow ha accettato la richiesta per l\'URL'];
+        return ['status' => 'success', 'message' => 'IndexNow has accepted the request for l\'URL'];
     } else {
-        return ['status' => 'error', 'message' => 'Errore nell\'invio a IndexNow. Codice HTTP: ' . $http_code];
+        return ['status' => 'error', 'message' => 'Error sending to IndexNow. HTTP Code: ' . $http_code];
     }
 }
 
-// Recupera l'ID del documento dall'evento
+// Retrieve the document ID from the event
 if (isset($id) && is_numeric($id)) {
     $pageId = $id;
 } else {
     if ($Debug == 'yes') {
-        $modx->logEvent(0, 3, 'ID documento non valido', 'IndexNow Plugin error');
+        $modx->logEvent(0, 3, 'Invalid document ID', 'IndexNow Plugin error');
     }
-    return; // Ferma l'esecuzione se l'ID non è valido
+    return; // Stop if ID is invalid
 }
 
-// Ottieni l'URL della pagina modificata o creata
+// Get the URL of the modified or created page
 $pageUrl = $modx->makeUrl($pageId, '', '', 'full');
 
-// Costruisci l'URL per IndexNow
+// Build URL for IndexNow
 $indexnow_url = "https://api.indexnow.org/indexnow?url=" . urlencode($pageUrl) . "&key=" . $indexnow_key;
 
-// Quando una pagina viene salvata o eliminata, invia l'URL a IndexNow
+// When a page is saved or deleted, send the URL to IndexNow
 switch ($modx->event->name) {
     case 'OnDocFormSave':
-        // Invio della notifica a IndexNow per pagine create o aggiornate
+        // Sending notification to IndexNow for created or updated pages
         $responseIndexNow = sendToIndexNow($indexnow_url);
 
-        // Controlla il risultato e logga il messaggio appropriato solo se il debug è abilitato
+        // Check the result and log the appropriate message only if debugging is enabled
         if ($Debug == 'yes') {
             if ($responseIndexNow['status'] == 'success') {
                 $modx->logEvent(0, 1, $responseIndexNow['message'] . ': ' . $pageUrl, 'IndexNow doc ID '.$doc_id.' success');
@@ -99,13 +99,13 @@ switch ($modx->event->name) {
         break;
 
     case 'OnDocFormDelete':
-        // Invio della notifica a IndexNow per pagine eliminate
+        // Sending notification to IndexNow for deleted pages
         $responseIndexNow = sendToIndexNow($indexnow_url);
 
-        // Controlla il risultato e logga il messaggio appropriato solo se il debug è abilitato
+        // Check the result and log the appropriate message only if debugging is enabled
         if ($Debug == 'yes') {
             if ($responseIndexNow['status'] == 'success') {
-                $modx->logEvent(0, 1, $responseIndexNow['message'] . ' per l\'eliminazione della pagina: ' . $pageUrl, 'IndexNow Plugin success');
+                $modx->logEvent(0, 1, $responseIndexNow['message'] . ' for deleting the page: ' . $pageUrl, 'IndexNow Plugin success');
             } else {
                 $modx->logEvent(0, 3, $responseIndexNow['message'], 'IndexNow Plugin error');
             }
@@ -122,22 +122,22 @@ switch ($modx->event->name) {
             }
 			$pageUrl = $modx->makeUrl($doc_id, '', '', 'full');
 			
-            $modx->logEvent(0, 2, "$pageUrl escluso da IndexNow. INFO: DOC ID: $doc_id Template ID: $template_id, TV ID $indexnow_tvId \"$tv_name\" is $indexnow_tvvalue", 'IndexNow - doc ID '.$doc_id.' excluded');
+            $modx->logEvent(0, 2, "$pageUrl excluded by IndexNow. INFO: DOC ID: $doc_id Template ID: $template_id, TV ID $indexnow_tvId \"$tv_name\" is $indexnow_tvvalue", 'IndexNow - doc ID '.$doc_id.' excluded');
         }
     }
     
-	// Se la conferma è positiva e ResetTv è attivo Resetta il valore della TV
+	// If the confirmation is positive and ResetTv is active Reset the TV value
 	if ($ResetTv == 'yes' || $responseIndexNow['status'] == 'success') {
-    $reset_value = '';  // Vuoto per resettare
+    $reset_value = '';  // Empty to reset
 
-    // Controlla se esiste già un valore per quella TV e documento
+    // Check if there is already a value for that TV and document
     $result = $modx->db->getValue($modx->db->select('id', $modx->getFullTableName('site_tmplvar_contentvalues'), "contentid = $doc_id AND tmplvarid = $indexnow_tvId"));
 
     if ($result) {
-        // Se esiste un valore, lo aggiorniamo per resettarlo
+        // If there is a value, we update it to reset it
         $modx->db->update(array('value' => $reset_value), $modx->getFullTableName('site_tmplvar_contentvalues'), "contentid = $doc_id AND tmplvarid = $indexnow_tvId");
     } else {
-        // Se non esiste un valore, inserisci un nuovo record con il valore resettato
+        // If there is no value, insert a new record with the reset value
         $modx->db->insert(array(
             'tmplvarid' => $indexnow_tvId,
             'contentid' => $doc_id,
