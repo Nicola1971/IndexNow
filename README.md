@@ -1,5 +1,7 @@
 # IndexNow Plugin for Evolution CMS
 
+**Requirements**: This plugin requires Evolution CMS 1.4 or later
+
 ### What is IndexNow? 
 IndexNow is an easy way for websites owners to instantly inform search engines (Bing, Yandex, Naver) about latest content changes on their website.
 
