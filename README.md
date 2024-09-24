@@ -14,7 +14,7 @@ https://www.bing.com/indexnow
 
 - Go to https://www.bing.com/indexnow/getstarted (or https://webmaster.yandex.ru/) and generate the API key
 - Upload the txt api key to the root of your website
-- Install The plugin with Evo Extras Module
+- Install IndexNow plugin with Evo Extras Module
 - Assign InstallNow Template Variable to your templates
 
 **IndexNow TV**:  
