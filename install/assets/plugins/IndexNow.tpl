@@ -62,10 +62,10 @@ function sendToIndexNow($url) {
 
     // If the response is 202 (Accepted), return a success message
  if ($http_code == 200) {
-        return ['status' => 'success', 'message' => 'IndexNow has received the request for 'URL'];
+        return ['status' => 'success', 'message' => 'IndexNow has received the request for the URL'];
     } else 
     if ($http_code == 202) {
-        return ['status' => 'success', 'message' => 'IndexNow has accepted the request for l\'URL'];
+        return ['status' => 'success', 'message' => 'IndexNow has accepted the request for the URL'];
     } else {
         return ['status' => 'error', 'message' => 'Error sending to IndexNow. HTTP Code: ' . $http_code];
     }
