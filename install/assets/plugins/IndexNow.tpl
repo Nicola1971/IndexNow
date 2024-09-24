@@ -5,12 +5,12 @@
  *
  * @author    Nicola Lambathakis
  * @category    plugin
- * @version    1.5
+ * @version    1.6
  * @license	 http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal    @events OnDocFormSave,OnDocFormDelete
  * @internal    @installset base
- * @internal    @modx_category SEO
- * @internal    @properties  &indexnow_key= IndexNow Key:;string; &indexnow_tvId= IndexNow TV ID:;string; &Debug= Enable debug logs:;list;yes,no;yes &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string;
+ * @internal    @modx_category admin
+ * @internal    @properties  &indexnow_key= IndexNow Key:;string; &indexnow_tvId= IndexNow TV ID:;string; &ResetTv= Reset IndexNow TV after sending:;list;yes,no;yes &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string; &Debug= Enable documents sent and errors logs:;list;yes,no;yes &DebugExcluded= Enable documents excluded logs:;list;yes,no;no
  */
 if (!defined('MODX_BASE_PATH')) {
     die('What are you doing? Get out of here!');
@@ -114,7 +114,7 @@ switch ($modx->event->name) {
 }
     } else {
         // Document is excluded or not valid
-        if ($Debug == 'yes') {
+        if ($DebugExcluded == 'yes') {
 			if ($indexnow_tvID == 1) {
 				$indexnow_tvvalue ='active';
 			} else {
@@ -125,8 +125,10 @@ switch ($modx->event->name) {
             $modx->logEvent(0, 2, "$pageUrl escluso da IndexNow. INFO: DOC ID: $doc_id Template ID: $template_id, TV ID $indexnow_tvId \"$tv_name\" is $indexnow_tvvalue", 'IndexNow - doc ID '.$doc_id.' excluded');
         }
     }
-    // Resetta il valore della TV, cancellando il suo valore esistente (o impostando un valore predefinito)
-    $reset_value = '';  // Vuoto per resettare, oppure puoi specificare un valore predefinito
+    
+	// Resetta il valore della TV, cancellando il suo valore esistente (o impostando un valore predefinito)
+	if ($ResetTv == 'yes') {
+    $reset_value = '';  // Vuoto per resettare
 
     // Controlla se esiste già un valore per quella TV e documento
     $result = $modx->db->getValue($modx->db->select('id', $modx->getFullTableName('site_tmplvar_contentvalues'), "contentid = $doc_id AND tmplvarid = $indexnow_tvId"));
@@ -142,4 +144,5 @@ switch ($modx->event->name) {
             'value' => $reset_value
         ), $modx->getFullTableName('site_tmplvar_contentvalues'));
     }
+	}	
 }
