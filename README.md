@@ -9,5 +9,5 @@
 - Install IndexNow plugin with Evo Extras Module
 - Assign InstallNow Template Variable to your templates
 
-More info at: https://www.tattoocms.it/extras/plugins/indexnow-plugin-for-evolution-cms.html
+**More info**: https://www.tattoocms.it/extras/plugins/indexnow-plugin-for-evolution-cms.html
 
