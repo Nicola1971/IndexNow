@@ -22,7 +22,7 @@ https://www.bing.com/indexnow
 ![indexnow-conf](https://github.com/user-attachments/assets/0fa062ec-bd9e-4631-80b1-56edaa02ccb8)
 
 
-**IndexNow Key**: Your IndexNow API key (to generate API key go to https://www.bing.com/indexnow/getstarted)
+**IndexNow Key**: Your IndexNow API key (to generate API key go to https://www.bing.com/indexnow/getstarted or https://webmaster.yandex.ru/)
 
 **IndexNow TV ID**: ID of IndexNow Teemplate variable
 
@@ -32,7 +32,7 @@ https://www.bing.com/indexnow
 
 **Exclude Templates by id (comma separated)**: A list of templates id to exclude from sending to IndexNow 
 
-**Enable documents sent and errors logs**: Check the sending result and log the message 
+**Enable documents sent and errors logs**: Check the sending result and log the message to Evo Events Log
 
-**Enable documents excluded logs**: Send excluded documents report to logs (by doc id, template or disabled Tv)
+**Enable documents excluded logs**: Send info about excluded documents report to logs (doc id, template id and Tv value)
 
