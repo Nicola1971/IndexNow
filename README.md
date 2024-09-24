@@ -12,7 +12,9 @@ https://www.bing.com/indexnow
 
 ## Installation:
 
-- Install with Evo Extras Module
+- Go to https://www.bing.com/indexnow/getstarted (or https://webmaster.yandex.ru/) and generate the API key
+- Upload the txt api key to the root of your website
+- Install The plugin with Evo Extras Module
 - Assign InstallNow Template Variable to your templates
 
 **IndexNow TV**:  
@@ -24,7 +26,7 @@ https://www.bing.com/indexnow
 ![indexnow-conf](https://github.com/user-attachments/assets/0fa062ec-bd9e-4631-80b1-56edaa02ccb8)
 
 
-**IndexNow Key**: Your IndexNow API key (to generate API key go to https://www.bing.com/indexnow/getstarted or https://webmaster.yandex.ru/)
+**IndexNow Key**: Your IndexNow API key 
 
 **IndexNow TV ID**: ID of IndexNow Teemplate variable
 
