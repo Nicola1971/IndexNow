@@ -3,14 +3,19 @@
  *
  * IndexNow plugin
  *
- * @author    Nicola 
+ * @author Nicola Lambathakis http://www.tattoocms.it/ https://github.com/Nicola1971/
  * @category    plugin
  * @version    1.6.1
  * @license	 http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal    @events OnDocFormSave,OnDocFormDelete
  * @internal    @installset base
- * @internal    @modx_category admin
+ * @internal    @modx_category SEO
  * @internal    @properties  &indexnow_key= IndexNow Key:;string; &indexnow_tvId= IndexNow TV ID:;string; &ResetTv= Reset IndexNow TV after sending:;list;yes,no;yes &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string; &Debug= Enable documents sent and errors logs:;list;yes,no;yes &DebugExcluded= Enable documents excluded logs:;list;yes,no;no
+ * @internal    @disabled 0
+ * @lastupdate  24-09-2024
+ * @documentation Requirements: This plugin requires Evolution 1.4 or later
+ * @documentation https://github.com/Nicola1971/IndexNow/
+ * @reportissues https://github.com/Nicola1971/IndexNow/issues
  */
 if (!defined('MODX_BASE_PATH')) {
     die('What are you doing? Get out of here!');
