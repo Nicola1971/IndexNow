@@ -3,9 +3,9 @@
  *
  * IndexNow plugin
  *
- * @author    Nicola Lambathakis
+ * @author    Nicola 
  * @category    plugin
- * @version    1.6
+ * @version    1.6.1
  * @license	 http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal    @events OnDocFormSave,OnDocFormDelete
  * @internal    @installset base
@@ -126,8 +126,8 @@ switch ($modx->event->name) {
         }
     }
     
-	// Resetta il valore della TV, cancellando il suo valore esistente (o impostando un valore predefinito)
-	if ($ResetTv == 'yes') {
+	// Se la conferma è positiva e ResetTv è attivo Resetta il valore della TV
+	if ($ResetTv == 'yes' || $responseIndexNow['status'] == 'success') {
     $reset_value = '';  // Vuoto per resettare
 
     // Controlla se esiste già un valore per quella TV e documento
