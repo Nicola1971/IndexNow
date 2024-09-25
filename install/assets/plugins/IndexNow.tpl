@@ -5,14 +5,14 @@
  *
  * @author Nicola Lambathakis http://www.tattoocms.it/ https://github.com/Nicola1971/
  * @category    plugin
- * @version    1.6.1
+ * @version    1.7
  * @license	 http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @internal    @events OnDocFormSave,OnDocFormDelete
  * @internal    @installset base
  * @internal    @modx_category SEO
- * @internal    @properties  &indexnow_key= IndexNow Key:;string; &indexnow_tvId= IndexNow TV ID:;string; &ResetTv= Reset IndexNow TV after sending:;list;yes,no;yes &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string; &Debug= Enable documents sent and errors logs:;list;yes,no;yes &DebugExcluded= Enable documents excluded logs:;list;yes,no;no
+ * @internal    @properties  &indexnow_key= IndexNow Key:;string; &SendMode= Manual / Automatic sending:;list;manual,auto;manual &indexnow_tvId= IndexNow TV ID (manual mode):;string; &ResetTv= Reset IndexNow TV after sending (manual mode):;list;yes,no;yes &exclude_docs=Exclude Documents by id (comma separated);string; &exclude_templates=Exclude Templates by id (comma separated);string; &Debug= Enable documents sent and errors logs:;list;yes,no;yes &DebugExcluded= Enable documents excluded logs:;list;yes,no;no
  * @internal    @disabled 0
- * @lastupdate  24-09-2024
+ * @lastupdate  25-09-2024
  * @documentation Requirements: This plugin requires Evolution 1.4 or later
  * @documentation https://github.com/Nicola1971/IndexNow/
  * @reportissues https://github.com/Nicola1971/IndexNow/issues
@@ -37,8 +37,9 @@ if ($modx->event->name == 'OnDocFormSave' || $modx->event->name == 'OnDocFormDel
 	$indexnow_tv = $modx->getTemplateVarOutput($tv_name,$doc_id);
 	$indexnow_tvID = $indexnow_tv[$tv_name];
     // Check if the document should be excluded
-    if (!in_array($doc_id, $exclude_docs) && !in_array($template_id, $exclude_templates) && $indexnow_tvID == 1 && $published == 1) {
-        // Valid document - send to IndexNow
+	$VarindexTv = ($SendMode == 'manual') ? ($indexnow_tvID == 1) : true;
+	if ($VarindexTv && $published == 1  && !in_array($doc_id, $exclude_docs) && !in_array($template_id, $exclude_templates)) {
+// Valid document - send to IndexNow
 $indexnow_key = isset($indexnow_key) ? $indexnow_key : '';
 
 // Function to send a cURL request to IndexNow
@@ -96,7 +97,7 @@ switch ($modx->event->name) {
         // Check the result and log the appropriate message only if debugging is enabled
         if ($Debug == 'yes') {
             if ($responseIndexNow['status'] == 'success') {
-                $modx->logEvent(0, 1, $responseIndexNow['message'] . ': ' . $pageUrl, 'IndexNow doc ID '.$doc_id.' success');
+                $modx->logEvent(0, 1, $responseIndexNow['message'] . ': ' . $pageUrl, 'IndexNow doc ID '.$doc_id.' success - Send Mode: ' . $SendMode . '');
             } else {
                 $modx->logEvent(0, 3, $responseIndexNow['message'], 'IndexNow Plugin fail');
             }
@@ -110,7 +111,7 @@ switch ($modx->event->name) {
         // Check the result and log the appropriate message only if debugging is enabled
         if ($Debug == 'yes') {
             if ($responseIndexNow['status'] == 'success') {
-                $modx->logEvent(0, 1, $responseIndexNow['message'] . ' for deleting the page: ' . $pageUrl, 'IndexNow Plugin success');
+                $modx->logEvent(0, 1, $responseIndexNow['message'] . ' for deleting the page: ' . $pageUrl, 'IndexNow Plugin success - Send Mode: ' . $SendMode . '');
             } else {
                 $modx->logEvent(0, 3, $responseIndexNow['message'], 'IndexNow Plugin error');
             }
@@ -121,13 +122,13 @@ switch ($modx->event->name) {
         // Document is excluded or not valid
         if ($DebugExcluded == 'yes') {
 			if ($indexnow_tvID == 1) {
-				$indexnow_tvvalue ='active';
+				$indexnow_tvvalue ='send';
 			} else {
-                $indexnow_tvvalue ='inactive';
+                $indexnow_tvvalue ='do not send';
             }
 			$pageUrl = $modx->makeUrl($doc_id, '', '', 'full');
 			
-            $modx->logEvent(0, 2, "$pageUrl excluded by IndexNow. INFO: DOC ID: $doc_id Template ID: $template_id, TV ID $indexnow_tvId \"$tv_name\" is $indexnow_tvvalue", 'IndexNow - doc ID '.$doc_id.' excluded');
+            $modx->logEvent(0, 2, "$pageUrl <b>excluded and not sent by IndexNow</b>. <br/> <br/>  <h3>MORE INFO</h3> <br/> <b>Send Mode:</b> $SendMode<br/><b>DOC ID:</b> $doc_id<br/><b>Template ID:</b> $template_id <br/><b>TV \"$tv_name\" </b>(ID $indexnow_tvId) is set to <b>$indexnow_tvvalue</b>", 'IndexNow Plugin - doc ID '.$doc_id.' excluded and not sent');
         }
     }
     
