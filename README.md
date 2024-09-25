@@ -2,6 +2,8 @@
 
 **Requirements**: This plugin requires Evolution CMS 1.4 or later
 
+![indexnow-evolution-cms-plugin](https://github.com/user-attachments/assets/12094cb5-8629-4352-9207-c8765feef4ea)
+
 ## Installation:
 
 - Go to https://www.bing.com/indexnow/getstarted (or https://webmaster.yandex.ru/) and generate the API key
@@ -9,5 +11,5 @@
 - Install IndexNow plugin with Evo Extras Module
 - Assign InstallNow Template Variable to your templates
 
-**More info**: https://www.tattoocms.it/extras/plugins/indexnow-plugin-for-evolution-cms.html
+**More info and instructions**: https://www.tattoocms.it/extras/plugins/indexnow-plugin-for-evolution-cms.html
 
