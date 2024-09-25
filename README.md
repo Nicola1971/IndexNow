@@ -2,8 +2,6 @@
 
 **Requirements**: This plugin requires Evolution CMS 1.4 or later
 
-![indexnow-evolution-cms-plugin](https://github.com/user-attachments/assets/12094cb5-8629-4352-9207-c8765feef4ea)
-
 ## Installation:
 
 - Go to https://www.bing.com/indexnow/getstarted (or https://webmaster.yandex.ru/) and generate the API key
